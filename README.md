@@ -1,6 +1,6 @@
 # Steps to run locally
 
-## Step: 1 Install
+## Step:1 Install
 ### `npm install`
 
 ## Step:2 Run dev setup
