@@ -80,7 +80,6 @@ class GifContainer extends React.Component<GifContainerProps>{
     }, 300)
 
     onCardCLickHandler = _.debounce((gif: IGif, value: boolean) => {
-      console.log(gif, value)
       const {setModalContent, setModalState} = this.props;
 
       if(setModalContent)
