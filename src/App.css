@@ -48,3 +48,9 @@ body{
   align-items: center;
   min-height: 100px;
 }
+.ErrorBox {
+  background: #fbf9f9;
+  padding: 15px;
+  border-radius: 5px;
+  border-left: 5px solid red;
+}

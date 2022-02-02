@@ -16,10 +16,15 @@ export interface IGif {
     id: string,
     source: string
 }
+export interface IErrorObject {
+    hasError: boolean,
+    message: string
+}
 export interface IAppState {
     gifs: IGif[],
     modalContent: IGif
-    modalState: boolean
+    modalState: boolean,
+    error: IErrorObject
 }
 export interface IAction {
     type: ActionType;

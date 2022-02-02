@@ -2,9 +2,9 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { gifsSelector } from '../../../store/selector';
+import { errorSelector, gifsSelector } from '../../../store/selector';
 import { ActionType } from '../../../types/enums';
-import { IAction, IAppState, IGif } from '../../../types/interfaces';
+import { IAction, IAppState, IErrorObject, IGif } from '../../../types/interfaces';
 import FilterComponent from '../../view/FilterComponent/FilterComponent';
 import GifList from '../../view/GifList/GifList';
 import styles from './GifContainer.module.css';
@@ -15,11 +15,13 @@ interface GifContainerProps {
   loadMoreGifs: (query: string, offset: number)=> any
   setModalContent: (gif: IGif,)=> any
   setModalState: (value: boolean)=> any
-  gifs: IGif[]
+  gifs: IGif[],
+  error: IErrorObject
 }
 const storeToProps = (state:IAppState): Partial<GifContainerProps> => {
   return {
-    gifs: gifsSelector(state)
+    gifs: gifsSelector(state),
+    error: errorSelector(state)
   };
 }
 const actionsFromComponent = (dispatch: Dispatch<IAction>): GifContainerProps => {
@@ -93,18 +95,34 @@ class GifContainer extends React.Component<GifContainerProps>{
     }, 0)
 
     render(): React.ReactNode {
-      const {gifs} = this.props;
+      const {gifs, error} = this.props;
       return(
-        <div className={styles.GifContainer} data-testid="GifContainer">
-          <FilterComponent 
-            dispatchSearchAction={this.dispatchSearchAction}
-          ></FilterComponent>
-          <GifList 
-            gifs={gifs}
-            onButtonCLickHandler={this.onButtonCLickHandler}
-            onCardCLickHandler={this.onCardCLickHandler}
-          ></GifList>
-        </div>
+        <>
+         {
+           !error.hasError ?
+           <div className={styles.GifContainer} data-testid="GifContainer">
+              <FilterComponent 
+                dispatchSearchAction={this.dispatchSearchAction}
+              ></FilterComponent>
+              <GifList 
+                gifs={gifs}
+                onButtonCLickHandler={this.onButtonCLickHandler}
+                onCardCLickHandler={this.onCardCLickHandler}
+              ></GifList>
+             </div>
+           :
+           <div className="ErrorBox">
+             <h3>Error :(</h3>
+             <blockquote>
+               Looks like something is broken. Did we add the <b>API_KEY</b>?
+               <pre>
+                 we can add it in <b>env.dev.ts</b> file
+               </pre>
+             </blockquote>
+           </div>
+         }
+        </>
+        
       )
     }
     

@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { ActionType } from "../../types/enums";
-import { IAction, IAppState, IGif } from "../../types/interfaces";
+import { IAction, IAppState, IErrorObject, IGif } from "../../types/interfaces";
 import { AppState} from "../model/store-model";
 const initialState = new AppState()
 
@@ -37,10 +37,21 @@ const setModalState = (state: boolean = initialState.modalState, action: IAction
    }
   return state;  
 }
+const setError = (state: IErrorObject = initialState.error, action: IAction) : IErrorObject =>{
+  switch(action.type){
+     case ActionType.SET_API_ERROR:
+      state =   action.payload;
+      break;
+     default:
+      // nothing to change
+ }
+return state;  
+}
 let reducers : Record<keyof IAppState, (state: any, action: any)=>any> = {
     gifs : gifList,
     modalContent: setModalContent,
-    modalState: setModalState
+    modalState: setModalState,
+    error: setError
 }
 // key of IAppState
 export default combineReducers(reducers);

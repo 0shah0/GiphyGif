@@ -1,22 +1,26 @@
 import {all, call, put, takeLatest} from 'redux-saga/effects'
 import { ActionType } from '../../types/enums';
-import { IAction, IGif } from '../../types/interfaces';
+import { IAction, IErrorObject, IGif } from '../../types/interfaces';
 import { GiphyFetch } from '@giphy/js-fetch-api'
 import { JsonConvert, OperationMode, ValueCheckingMode } from 'json2typescript';
 import { GiphyResponse } from '../model/giphy-response';
+import { environment } from '../../env.dev';
 
 let jsonConvert: JsonConvert = new JsonConvert();
-jsonConvert.operationMode = OperationMode.ENABLE; // print some debug data
-jsonConvert.ignorePrimitiveChecks = false; // don't allow assigning number to string etc.
-jsonConvert.valueCheckingMode = ValueCheckingMode.DISALLOW_NULL; // never allow null
+// print some debug data
+jsonConvert.operationMode = OperationMode.ENABLE; 
+// don't allow assigning number to string etc.
+jsonConvert.ignorePrimitiveChecks = false; 
+// never allow null
+jsonConvert.valueCheckingMode = ValueCheckingMode.DISALLOW_NULL; 
 
 // Giphy client 
-const gf = new GiphyFetch('tVaJe9QRTL6VZp9xhBkogbNWFTI9hYnJ')
+const gf = new GiphyFetch(environment.API_KEY);
 
 
 function* getGifsAsync(action: IAction){
 
-    const nextType =  
+    let nextType =  
         (action.type === ActionType.LOADMORE_GIFS_FROM_API) ? 
         ActionType.APPEND_GIFS_TO_STORE : 
         ActionType.UPDATE_GIFS_TO_STORE;
@@ -35,12 +39,22 @@ function* getGifsAsync(action: IAction){
             try {
                 giphyResponse = jsonConvert.deserializeObject(response, GiphyResponse);
             } catch (e) {
-                console.error((e));
+                console.error('deserializeObject Error:', e);
+                nextType = ActionType.SET_API_ERROR;
+                return {    
+                    hasError : true,
+                    message: e.message
+                } as IErrorObject
+                
             }
             return giphyResponse.data;
         }catch(e){
-            console.error('error:', e)
-            //TODO: set error state
+            console.error('Giphy API error:', e);
+            nextType = ActionType.SET_API_ERROR;
+                return {    
+                    hasError : true,
+                    message: e.message
+                } as IErrorObject
         }
         
     });
@@ -55,7 +69,6 @@ export function* rootSaga () {
     yield all([
         takeLatest(ActionType.GET_GIFS_FROM_API, getGifsAsync),
         takeLatest(ActionType.SEARCH_GIFS_FROM_API, getGifsAsync),
-        takeLatest(ActionType.LOADMORE_GIFS_FROM_API, getGifsAsync),
-
+        takeLatest(ActionType.LOADMORE_GIFS_FROM_API, getGifsAsync)
     ])
 }
