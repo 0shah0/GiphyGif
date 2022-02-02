@@ -39,7 +39,7 @@ class GifList extends React.PureComponent<GifListProps, GifListState>{
           <div className="container">
             <div className="row">
                 {gifs.map((gif)=>
-                    <div className="col-3 p-2" onClick={()=>{ this.onCardClick(gif)}} key={gif.id}>
+                    <div className="col-12 col-md-3 p-2" onClick={()=>{ this.onCardClick(gif)}} key={gif.id}>
                       <div className="frameImage">
                         <img alt={gif.title} className="img-fluid"src={gif.images.downsizedStill.url}/>
                       </div>
@@ -49,7 +49,7 @@ class GifList extends React.PureComponent<GifListProps, GifListState>{
           </div>  
           <div className="container container-load-more">
             <div className="row justify-content-center">
-               <button className='btn btn-primary mt-4 col-4' onClick={this.onButtonClick}> {this.state.buttonText} </button>
+               <button className='btn btn-primary mt-4 col-12 col-md-4' onClick={this.onButtonClick}> {this.state.buttonText} </button>
             </div>
           </div>    
         </div>

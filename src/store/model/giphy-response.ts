@@ -7,7 +7,7 @@ export class DownsizedStill {
     @JsonProperty("url", String, true)
     url: string = "";
 }
-
+@JsonObject("Preview")
 export class Preview {
     @JsonProperty("url", String, true)
     url: string = "";
