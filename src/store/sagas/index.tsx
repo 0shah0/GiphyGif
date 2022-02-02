@@ -17,7 +17,6 @@ jsonConvert.valueCheckingMode = ValueCheckingMode.DISALLOW_NULL;
 // Giphy client 
 const gf = new GiphyFetch(environment.API_KEY);
 
-
 function* getGifsAsync(action: IAction){
 
     let nextType =  
@@ -27,7 +26,7 @@ function* getGifsAsync(action: IAction){
 
     const {query, offset} =  action.payload || {};
     const options = {
-        limit : 12,
+        limit : 50,
         offset : offset || 0
     }
 
