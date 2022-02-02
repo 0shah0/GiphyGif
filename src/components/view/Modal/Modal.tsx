@@ -57,7 +57,7 @@ class Modal extends React.PureComponent<ModalProps>{
                 <div className="blanket"></div>
                 <div className='gifModal'>
                   <div className="title">
-                    <h3>{modalContent?.title}</h3>
+                    <h5>{modalContent?.title}</h5>
                   </div>
                   <div className="content"> 
                     <img alt={modalContent?.title} className="img-fluid" src={modalContent?.images?.preview?.url}></img>
